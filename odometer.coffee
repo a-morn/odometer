@@ -284,7 +284,9 @@ class Odometer
           @addSpacer valueDigit
     else
       wholePart = not @format.precision or not fractionalPart(value) or false
-      for digit in value.toString().split('').reverse()
+      valueS = value.toString()
+      valueS = "0" + valueS while 3 > valueS.length
+      for digit in valueS.split('').reverse()
         if digit is '.'
           wholePart = true
 
@@ -480,8 +482,10 @@ class Odometer
       digits.push frames
 
     @resetDigits()
-
-    for frames, i in digits.reverse()
+	
+    digits.reverse()
+    digits.push("0") while 3 > digits.length
+    for frames, i in digits
       if not @digits[i]
         @addDigit ' ', (i >= fractionalCount)
 

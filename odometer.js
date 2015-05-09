@@ -318,7 +318,7 @@
     };
 
     Odometer.prototype.formatDigits = function(value) {
-      var digit, valueDigit, valueString, wholePart, _i, _j, _len, _len1, _ref, _ref1;
+      var digit, valueDigit, valueS, valueString, wholePart, _i, _j, _len, _len1, _ref, _ref1;
       this.digits = [];
       if (this.options.formatFunction) {
         valueString = this.options.formatFunction(value);
@@ -336,7 +336,11 @@
         }
       } else {
         wholePart = !this.format.precision || !fractionalPart(value) || false;
-        _ref1 = value.toString().split('').reverse();
+        valueS = value.toString();
+        while (3 > valueS.length) {
+          valueS = "0" + valueS;
+        }
+        _ref1 = valueS.split('').reverse();
         for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
           digit = _ref1[_j];
           if (digit === '.') {
@@ -505,7 +509,7 @@
     };
 
     Odometer.prototype.animateSlide = function(newValue) {
-      var boosted, cur, diff, digitCount, digits, dist, end, fractionalCount, frame, frames, i, incr, j, mark, numEl, oldValue, start, _base, _i, _j, _k, _l, _len, _len1, _len2, _m, _ref, _results;
+      var boosted, cur, diff, digitCount, digits, dist, end, fractionalCount, frame, frames, i, incr, j, mark, numEl, oldValue, start, _base, _i, _j, _k, _l, _len, _len1, _len2, _m, _results;
       oldValue = this.value;
       fractionalCount = this.getFractionalDigitCount(oldValue, newValue);
       if (fractionalCount) {
@@ -549,9 +553,12 @@
         digits.push(frames);
       }
       this.resetDigits();
-      _ref = digits.reverse();
-      for (i = _l = 0, _len1 = _ref.length; _l < _len1; i = ++_l) {
-        frames = _ref[i];
+      digits.reverse();
+      while (3 > digits.length) {
+        digits.push("0");
+      }
+      for (i = _l = 0, _len1 = digits.length; _l < _len1; i = ++_l) {
+        frames = digits[i];
         if (!this.digits[i]) {
           this.addDigit(' ', i >= fractionalCount);
         }
